@@ -13,6 +13,14 @@ from core.routes import (
 )
 from PIL import Image, ImageTk
 import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class Tooltip:
     def __init__(self, widget, text):
@@ -96,7 +104,7 @@ class MainMenu(Frame):
         self.show_dashboard()
 
     def load_icon(self, filename, size=(64, 64)):
-        path = os.path.join("assets", filename)
+        path = resource_path(os.path.join("assets", filename))
         img = Image.open(path).resize(size)
         return ImageTk.PhotoImage(img)
 
