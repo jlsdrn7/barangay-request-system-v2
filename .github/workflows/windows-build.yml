@@ -25,15 +25,10 @@ jobs:
           pip install pyinstaller
 
       - name: Build executable with PyInstaller
-        run: |
-          pyinstaller app_entry.py --onefile --noconsole ^
-          --icon=assets/icon.ico ^
-          --add-data "assets;assets" ^
-          --hidden-import=ttkbootstrap ^
-          --name BrgyRequestSystem
+        run: pyinstaller app_entry.py --onefile --noconsole --icon=assets/icon.ico --name BarangayRequestApp
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: BrgyRequestSystem EXE
-          path: dist/BrgyRequestSystem.exe
+          name: Barangay Request System EXE
+          path: dist/BarangayRequestApp.exe
