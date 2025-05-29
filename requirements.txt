@@ -1,4 +1,0 @@
-ttkbootstrap
-Pillow
-fpdf
-# trigger GitHub build
