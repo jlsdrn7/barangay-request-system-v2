@@ -1,18 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from PyInstaller.utils.hooks import collect_submodules
-import os
 from glob import glob
+import os
 
 block_cipher = None
 
-# Collect every file inside assets folder (PNG, ICO, JPG, etc.)
-asset_files = []
-for filepath in glob("assets/*"):
-    asset_files.append((filepath, os.path.join("assets", os.path.basename(filepath))))
-
-# Add the database
-asset_files.append(("barangay.db", "barangay.db"))
+# Collect all files inside the 'assets' folder (including .png and .ico)
+asset_files = [(f, os.path.join("assets", os.path.basename(f))) for f in glob("assets/*")]
+asset_files.append(('barangay.db', 'barangay.db'))
 
 a = Analysis(
     ['app_entry.py'],
@@ -41,10 +37,7 @@ exe = EXE(
     upx=True,
     console=False,
     disable_windowed_traceback=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
-    icon='assets/icon.ico',
+    icon='assets/icon.ico'
 )
 
 coll = COLLECT(
@@ -54,6 +47,5 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=True,
-    upx_exclude=[],
-    name='BarangayRequestApp',
+    name='BarangayRequestApp'
 )
