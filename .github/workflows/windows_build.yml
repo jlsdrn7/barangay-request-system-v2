@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
@@ -24,11 +24,12 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build executable with PyInstaller
-        run: pyinstaller app_entry.py --onefile --noconsole --icon=assets/icon.ico --name BarangayRequestApp
+      - name: Build EXE with PyInstaller using .spec
+        run: |
+          pyinstaller BarangayRequestApp.spec --noconfirm --clean
 
-      - name: Upload EXE
-        uses: actions/upload-artifact@v4
+      - name: Upload Windows Build ZIP
+        uses: actions/upload-artifact@v3
         with:
-          name: Barangay Request System EXE
-          path: dist/BarangayRequestApp.exe
+          name: BarangayRequestApp-Windows
+          path: dist/BarangayRequestApp/**
