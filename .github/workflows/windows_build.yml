@@ -28,7 +28,7 @@ jobs:
         run: |
           pyinstaller BarangayRequestApp.spec --noconfirm --clean
 
-      - name: Upload EXE build folder
+      - name: Upload Windows Build folder
         uses: actions/upload-artifact@v4
         with:
           name: BarangayRequestApp-Windows
