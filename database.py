@@ -1,36 +1,42 @@
 import sqlite3
+import os
 from utils.path_helper import resource_path
 
 DB_NAME = resource_path("barangay.db")
 
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
+    os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS residents (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name TEXT NOT NULL,
-            age INTEGER,
-            address TEXT,
-            contact TEXT
-        )
-    """)
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS requests (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            resident_id INTEGER NOT NULL,
-            document_type TEXT NOT NULL,
-            purpose TEXT,
-            status TEXT DEFAULT 'Pending',
-            request_date TEXT NOT NULL,
-            FOREIGN KEY (resident_id) REFERENCES residents(id)
-        )
-    """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS residents (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                full_name TEXT NOT NULL,
+                age INTEGER,
+                address TEXT,
+                contact TEXT
+            )
+        """)
 
-    conn.commit()
-    conn.close()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS requests (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                resident_id INTEGER NOT NULL,
+                document_type TEXT NOT NULL,
+                purpose TEXT,
+                status TEXT DEFAULT 'Pending',
+                request_date TEXT NOT NULL,
+                FOREIGN KEY (resident_id) REFERENCES residents(id)
+            )
+        """)
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[ERROR] Failed to init DB: {e}")
 
 def get_count(table, condition=None):
     try:
