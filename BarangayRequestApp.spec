@@ -1,20 +1,28 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_submodules
+from glob import glob
+import os
+
+block_cipher = None
+
+asset_files = [(f, os.path.join("assets", os.path.basename(f))) for f in glob("assets/*.png")]
+asset_files.append(('assets/icon.ico', 'assets/icon.ico'))
 
 a = Analysis(
     ['app_entry.py'],
     pathex=[],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=asset_files,
+    hiddenimports=collect_submodules('ttkbootstrap'),
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
-    optimize=0,
 )
-pyz = PYZ(a.pure)
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
     pyz,
@@ -28,24 +36,19 @@ exe = EXE(
     upx=True,
     console=False,
     disable_windowed_traceback=False,
-    argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets/icon.ico'],
+    icon='assets/icon.ico',
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
+    a.zipfiles,
     a.datas,
     strip=False,
     upx=True,
     upx_exclude=[],
     name='BarangayRequestApp',
-)
-app = BUNDLE(
-    coll,
-    name='BarangayRequestApp.app',
-    icon='assets/icon.ico',
-    bundle_identifier=None,
 )

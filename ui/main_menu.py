@@ -12,15 +12,8 @@ from core.routes import (
     go_to_issued_certificates
 )
 from PIL import Image, ImageTk
+from utils.path_helper import resource_path
 import os
-import sys
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
 
 class Tooltip:
     def __init__(self, widget, text):
@@ -104,9 +97,13 @@ class MainMenu(Frame):
         self.show_dashboard()
 
     def load_icon(self, filename, size=(64, 64)):
-        path = resource_path(os.path.join("assets", filename))
-        img = Image.open(path).resize(size)
-        return ImageTk.PhotoImage(img)
+        try:
+            path = resource_path(os.path.join("assets", filename))
+            img = Image.open(path).resize(size)
+            return ImageTk.PhotoImage(img)
+        except Exception as e:
+            print(f"Warning: Could not load icon '{filename}': {e}")
+            return None
 
     def show_dashboard(self):
         for widget in self.content.winfo_children():
@@ -134,17 +131,18 @@ class MainMenu(Frame):
             canvas.pack(fill=BOTH, expand=YES)
 
             canvas.create_rectangle(15, 15, 325, 205, fill="#adb5bd", outline="", width=0)
-            card = canvas.create_rectangle(0, 0, 310, 190, fill="#ffffff", outline="#dee2e6", width=1)
+            canvas.create_rectangle(0, 0, 310, 190, fill="#ffffff", outline="#dee2e6", width=1)
 
             frame = tk.Frame(canvas, bg="#ffffff")
             frame.place(x=10, y=10, width=300, height=180)
 
             icon = self.load_icon(icon_file)
-            tk.Label(frame, image=icon, bg="#ffffff").pack(anchor="center", pady=(0, 10))
+            if icon:
+                tk.Label(frame, image=icon, bg="#ffffff").pack(anchor="center", pady=(0, 10))
+                frame.image = icon
+
             tk.Label(frame, text=title, font=("Segoe UI", 16, "bold"), fg="#212529", bg="#ffffff").pack(anchor="center")
             tk.Label(frame, text=desc, font=("Segoe UI", 12), fg="#6c757d", bg="#ffffff").pack(anchor="center", pady=(5, 0))
-
-            frame.image = icon
 
             for widget in (canvas, frame):
                 widget.bind("<Button-1>", lambda e, cmd=command: cmd())
