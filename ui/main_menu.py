@@ -90,6 +90,7 @@ class MainMenu(Frame):
             btn = Button(sidebar, image=icon, bootstyle="dark", command=cmd)
             btn.pack(fill=X, expand=YES, pady=5)
             Tooltip(btn, tooltip_text)
+            btn.image = icon  # prevent garbage collection
 
         logout_btn = Button(
             sidebar,
@@ -99,6 +100,7 @@ class MainMenu(Frame):
         )
         logout_btn.pack(side=BOTTOM, fill=X, pady=5)
         Tooltip(logout_btn, "Logout")
+        logout_btn.image = self.icons["logout"]
 
         self.content = Frame(self, padding=40)
         self.content.pack(side=LEFT, fill=BOTH, expand=YES)
@@ -106,9 +108,6 @@ class MainMenu(Frame):
         self.show_dashboard()
 
     def load_icon(self, filename, size=(64, 64)):
-        """
-        Loads an icon from the assets folder with debug output
-        """
         try:
             path = resource_path(os.path.join("assets", filename))
             print(f"[DEBUG] Trying to load icon: {path}")
@@ -154,7 +153,7 @@ class MainMenu(Frame):
             if icon:
                 img_label = tk.Label(frame, image=icon, bg="#ffffff")
                 img_label.pack(anchor="center", pady=(0, 10))
-                img_label.image = icon
+                img_label.image = icon  # prevent GC
 
             tk.Label(frame, text=title, font=("Segoe UI", 16, "bold"), fg="#212529", bg="#ffffff").pack(anchor="center")
             tk.Label(frame, text=desc, font=("Segoe UI", 12), fg="#6c757d", bg="#ffffff").pack(anchor="center", pady=(5, 0))
