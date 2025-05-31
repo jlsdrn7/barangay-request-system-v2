@@ -15,6 +15,7 @@ from PIL import Image, ImageTk
 from utils.path_helper import resource_path
 import os
 
+
 class Tooltip:
     def __init__(self, widget, text):
         self.widget = widget
@@ -51,6 +52,7 @@ class Tooltip:
         if self.tip_window:
             self.tip_window.destroy()
             self.tip_window = None
+
 
 class MainMenu(Frame):
     def __init__(self, master):
@@ -104,9 +106,12 @@ class MainMenu(Frame):
         self.show_dashboard()
 
     def load_icon(self, filename, size=(64, 64)):
+        """
+        Loads an icon from the assets folder with debug output
+        """
         try:
             path = resource_path(os.path.join("assets", filename))
-            print(f"[DEBUG] Loading icon: {path}")
+            print(f"[DEBUG] Trying to load icon: {path}")
             img = Image.open(path).resize(size)
             return ImageTk.PhotoImage(img)
         except Exception as e:
@@ -147,8 +152,9 @@ class MainMenu(Frame):
             icon_key = icon_file.split(".")[0]
             icon = self.dashboard_icons.get(icon_key)
             if icon:
-                tk.Label(frame, image=icon, bg="#ffffff").pack(anchor="center", pady=(0, 10))
-                frame.image = icon
+                img_label = tk.Label(frame, image=icon, bg="#ffffff")
+                img_label.pack(anchor="center", pady=(0, 10))
+                img_label.image = icon
 
             tk.Label(frame, text=title, font=("Segoe UI", 16, "bold"), fg="#212529", bg="#ffffff").pack(anchor="center")
             tk.Label(frame, text=desc, font=("Segoe UI", 12), fg="#6c757d", bg="#ffffff").pack(anchor="center", pady=(5, 0))
