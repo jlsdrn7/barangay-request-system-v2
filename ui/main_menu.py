@@ -65,6 +65,13 @@ class MainMenu(Frame):
             "logout": self.load_icon("logout.png")
         }
 
+        self.dashboard_icons = {
+            "residents": self.load_icon("residents.png"),
+            "pending": self.load_icon("pending.png"),
+            "approved": self.load_icon("approved.png"),
+            "certificate": self.load_icon("certificate.png")
+        }
+
         sidebar = Frame(self, width=80, style="dark.TFrame")
         sidebar.pack(side=LEFT, fill=Y)
         sidebar.pack_propagate(False)
@@ -137,7 +144,8 @@ class MainMenu(Frame):
             frame = tk.Frame(canvas, bg="#ffffff")
             frame.place(x=10, y=10, width=300, height=180)
 
-            icon = self.load_icon(icon_file)
+            icon_key = icon_file.split(".")[0]
+            icon = self.dashboard_icons.get(icon_key)
             if icon:
                 tk.Label(frame, image=icon, bg="#ffffff").pack(anchor="center", pady=(0, 10))
                 frame.image = icon
