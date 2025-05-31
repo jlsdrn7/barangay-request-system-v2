@@ -6,9 +6,7 @@ import os
 
 block_cipher = None
 
-asset_files = [(f, os.path.join("assets", os.path.basename(f))) for f in glob("assets/*.png")]
-asset_files.append(('assets/icon.ico', 'assets/icon.ico'))
-
+asset_files = [(f, os.path.join("assets", os.path.basename(f))) for f in glob("assets/*")]
 asset_files.append(('barangay.db', 'barangay.db'))
 
 a = Analysis(
