@@ -1,15 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from PyInstaller.utils.hooks import collect_submodules
+from glob import glob
 import os
 
 block_cipher = None
 
-# Include the entire assets folder with its structure
-asset_files = [
-    ("assets", "assets"),
-    ("barangay.db", "barangay.db"),
-]
+asset_files = [(f, os.path.join("assets", os.path.basename(f))) for f in glob("assets/*.png")]
+asset_files.append(('assets/icon.ico', 'assets/icon.ico'))
+asset_files.append(('barangay.db', 'barangay.db'))
 
 a = Analysis(
     ['app_entry.py'],
