@@ -99,10 +99,11 @@ class MainMenu(Frame):
     def load_icon(self, filename, size=(64, 64)):
         try:
             path = resource_path(os.path.join("assets", filename))
+            print(f"[DEBUG] Loading icon: {path}")
             img = Image.open(path).resize(size)
             return ImageTk.PhotoImage(img)
         except Exception as e:
-            print(f"Warning: Could not load icon '{filename}': {e}")
+            print(f"[ERROR] Could not load icon '{filename}': {e}")
             return None
 
     def show_dashboard(self):
